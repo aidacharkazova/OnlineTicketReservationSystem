@@ -24,7 +24,7 @@ public class AppUser {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "role")
-    private List<String> roles;
+    private List<String> roles = List.of("USER");
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
