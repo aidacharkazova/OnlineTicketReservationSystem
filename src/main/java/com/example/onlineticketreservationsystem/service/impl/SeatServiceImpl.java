@@ -32,8 +32,8 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public List<SeatResponse> getSeatsByVenue(Long venueId) {
         venueRepository.findById(venueId).orElseThrow(() -> new ResourceNotFoundException("There is no venue with id " + venueId));
-        seatRepository.findAll().stream().filter(seat -> seat.getVenue().getId().equals(venueId)).toList()
-        return ;
+        seatRepository.findAll().stream().filter(seat -> seat.getVenue().getId().equals(venueId)).toList();
+        return null;
     }
 
     @Override

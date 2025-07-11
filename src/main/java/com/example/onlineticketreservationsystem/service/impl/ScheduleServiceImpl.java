@@ -12,6 +12,9 @@ import com.example.onlineticketreservationsystem.repository.ScheduleRepository;
 import com.example.onlineticketreservationsystem.repository.VenueRepository;
 import com.example.onlineticketreservationsystem.service.interfaces.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +27,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final EventRepository eventRepository;
     private final VenueRepository venueRepository;
     private final ScheduleMapper scheduleMapper;
+    private static final String CACHE_NAME = "schedules";
+    private static final Logger logger = LoggerFactory.getLogger(ScheduleServiceImpl.class);
 
     @Override
     public ScheduleResponse createSchedule(ScheduleRequest request) {
@@ -39,6 +44,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleMapper.toResponse(scheduleRepository.save(schedule));
     }
 
+    @Cacheable(value = CACHE_NAME, key = "'all'")
     @Override
     public List<ScheduleResponse> getAllSchedules() {
         return scheduleRepository.findAll().stream()
@@ -46,6 +52,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = CACHE_NAME, key = "#id")
     @Override
     public ScheduleResponse getScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findById(id)

@@ -15,7 +15,11 @@ import com.example.onlineticketreservationsystem.repository.SeatRepository;
 import com.example.onlineticketreservationsystem.repository.TicketRepository;
 import com.example.onlineticketreservationsystem.repository.UserRepository;
 import com.example.onlineticketreservationsystem.service.interfaces.TicketService;
+import com.example.onlineticketreservationsystem.service.interfaces.VenueService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +34,8 @@ public class TicketServiceImpl implements TicketService {
     private final UserRepository appUserRepository;
     private final ScheduleRepository scheduleRepository;
     private final SeatRepository seatRepository;
+    private static final String CACHE_NAME = "tickets";
+    private static final Logger logger = LoggerFactory.getLogger(TicketServiceImpl.class);
 
     @Override
     public TicketResponse reserveTicket(TicketRequest request) {
@@ -56,6 +62,7 @@ public class TicketServiceImpl implements TicketService {
         return ticketMapper.toResponse(ticketRepository.save(ticket));
     }
 
+    @Cacheable(value = CACHE_NAME, key = "'all'")
     @Override
     public List<TicketResponse> getAllTickets() {
         return ticketRepository.findAll().stream()
