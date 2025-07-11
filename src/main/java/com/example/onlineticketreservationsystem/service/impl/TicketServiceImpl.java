@@ -4,6 +4,7 @@ import com.example.onlineticketreservationsystem.dto.request.TicketRequest;
 import com.example.onlineticketreservationsystem.dto.response.TicketResponse;
 import com.example.onlineticketreservationsystem.exception.custom.DuplicateTicketException;
 import com.example.onlineticketreservationsystem.exception.custom.ResourceNotFoundException;
+import com.example.onlineticketreservationsystem.exception.custom.SeatAlreadyBookedException;
 import com.example.onlineticketreservationsystem.mapper.TicketMapper;
 import com.example.onlineticketreservationsystem.model.entity.AppUser;
 import com.example.onlineticketreservationsystem.model.entity.Schedule;
@@ -42,7 +43,7 @@ public class TicketServiceImpl implements TicketService {
 
         boolean exists = ticketRepository.existsByScheduleIdAndSeatId(request.getScheduleId(), request.getSeatId());
         if (exists) {
-            throw new DuplicateTicketException("Seat already booked for this schedule");
+            throw new SeatAlreadyBookedException("Seat already booked for this schedule");
         }
 
         AppUser user = appUserRepository.findById(request.getUserId())
