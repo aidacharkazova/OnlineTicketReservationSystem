@@ -2,7 +2,6 @@ package com.example.onlineticketreservationsystem.service.impl;
 
 import com.example.onlineticketreservationsystem.dto.request.TicketRequest;
 import com.example.onlineticketreservationsystem.dto.response.TicketResponse;
-import com.example.onlineticketreservationsystem.exception.custom.DuplicateTicketException;
 import com.example.onlineticketreservationsystem.exception.custom.ResourceNotFoundException;
 import com.example.onlineticketreservationsystem.exception.custom.SeatAlreadyBookedException;
 import com.example.onlineticketreservationsystem.mapper.TicketMapper;
@@ -16,7 +15,6 @@ import com.example.onlineticketreservationsystem.repository.SeatRepository;
 import com.example.onlineticketreservationsystem.repository.TicketRepository;
 import com.example.onlineticketreservationsystem.repository.UserRepository;
 import com.example.onlineticketreservationsystem.service.interfaces.TicketService;
-import com.example.onlineticketreservationsystem.service.interfaces.VenueService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,4 +68,30 @@ public class TicketServiceImpl implements TicketService {
                 .map(ticketMapper::toResponse)
                 .collect(Collectors.toList());
     }
+    @Cacheable(value = CACHE_NAME, key = "#id")
+    @Override
+    public TicketResponse getTicketById(Long id) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
+        return ticketMapper.toResponse(ticket);
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'user_' + #userId")
+    @Override
+    public List<TicketResponse> getTicketsByUserId(Long userId) {
+        AppUser user = appUserRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        return ticketRepository.findByUser(user).stream()
+                .map(ticketMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void cancelTicket(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + ticketId));
+        ticketRepository.delete(ticket);
+    }
+
 }
