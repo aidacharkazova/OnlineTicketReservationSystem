@@ -1,11 +1,16 @@
 package com.example.onlineticketreservationsystem.dto.response;
 
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class TokenResponse {
+@NoArgsConstructor
+@Builder
+public class JwtResponse {
     private String accessToken;
-    private String refreshToken;
+    private String token;
 }

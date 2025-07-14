@@ -14,8 +14,8 @@ public interface ScheduleMapper {
     @Mapping(source = "venue.name", target = "venueName")
     ScheduleResponse toResponse(Schedule schedule);
 
-    @Mapping(target = "eventName", ignore = true)
-    @Mapping(target = "venueName", ignore = true)
+    @Mapping(target = "event", ignore = true)
+    @Mapping(target = "venue", ignore = true)
     @Mapping(target = "tickets", ignore = true)
     Schedule toEntity(ScheduleRequest scheduleRequest);
 }
