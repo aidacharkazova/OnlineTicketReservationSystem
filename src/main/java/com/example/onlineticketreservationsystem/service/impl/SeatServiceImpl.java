@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class SeatServiceImpl implements SeatService {
 
     @Override
     public SeatResponse getSeatById(Long seatId) {
-        return null;
+        return seatMapper.toResponse(seatRepository.findById(seatId).get());
     }
 
     @Override
