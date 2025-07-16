@@ -1,8 +1,8 @@
 package com.example.onlineticketreservationsystem.filter;
 
 
-import com.example.onlineticketreservationsystem.config.UserInfoUserDetailsService;
 import com.example.onlineticketreservationsystem.service.JwtService;
+import com.example.onlineticketreservationsystem.service.impl.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private UserInfoUserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -51,15 +51,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+
         String path = request.getRequestURI();
-        return path.startsWith("/h2-console")
+        boolean shouldSkip = path.startsWith("/h2-console")
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs");
+
+        System.out.println("Should skip " + path + "? " + shouldSkip);
+        return shouldSkip;
     }
 
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-//        String path = request.getRequestURI();
-//        return path.startsWith("/h2-console");
-//    }
 }

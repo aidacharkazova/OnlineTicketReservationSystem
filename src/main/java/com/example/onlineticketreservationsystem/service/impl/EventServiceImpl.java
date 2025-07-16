@@ -29,7 +29,6 @@ public class EventServiceImpl implements EventService {
         Event entity = eventMapper.toEntity(eventRequest);
         eventRepository.save(entity);
         return eventMapper.toResponse(entity);
-
     }
 
     @Cacheable(value = CACHE_NAME, key = "'all'")
@@ -59,6 +58,5 @@ public class EventServiceImpl implements EventService {
     @Override
     public void deleteEvent(EventRequest eventRequest) {
         eventRepository.delete(eventMapper.toEntity(eventRequest));
-
     }
 }

@@ -14,12 +14,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "seats")
 public class Seat {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JoinColumn(name = "seat_number")
     private String seatNumber; // e.g., A1, B10
     private String row; // Optional
 

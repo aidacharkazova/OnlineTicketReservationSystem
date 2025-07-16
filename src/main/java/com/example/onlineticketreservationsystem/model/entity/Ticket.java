@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "tickets")
 public class Ticket {
     @Id
@@ -36,6 +35,7 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 
+    @JoinColumn(name = "booking_time")
     private LocalDateTime bookingTime;
 
 }

@@ -5,28 +5,34 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "users")
 public class AppUser {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
+
+    @Column(unique = true)
     private String email;
+
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "role")
-    private List<String> roles = List.of("USER");
+    private List<String> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Ticket> tickets;
+
+
 }
