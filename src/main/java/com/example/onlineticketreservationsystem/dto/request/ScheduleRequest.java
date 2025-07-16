@@ -1,5 +1,6 @@
 package com.example.onlineticketreservationsystem.dto.request;
 
+import com.example.onlineticketreservationsystem.validation.FutureLocalDateTime;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -15,11 +16,11 @@ public class ScheduleRequest {
     private Long venueId;
 
     @NotNull(message = "Start time is required")
-    @Future(message = "Start time must be in the future")
+    @FutureLocalDateTime
     private LocalDateTime startTime;
 
     @NotNull(message = "End time is required")
-    @Future(message = "End time must be in the future")
+    @FutureLocalDateTime
     private LocalDateTime endTime;
 
 }

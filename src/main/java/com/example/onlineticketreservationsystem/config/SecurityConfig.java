@@ -2,7 +2,6 @@ package com.example.onlineticketreservationsystem.config;
 
 import com.example.onlineticketreservationsystem.filter.JwtAuthFilter;
 import com.example.onlineticketreservationsystem.service.impl.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,13 +25,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter authFilter;
-    private final CustomUserDetailsService userDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public SecurityConfig(JwtAuthFilter authFilter, CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(JwtAuthFilter authFilter, CustomUserDetailsService customUserDetailsService) {
         this.authFilter = authFilter;
-        this.userDetailsService = userDetailsService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return customUserDetailsService;
+    }
 
 
     @Bean
@@ -65,10 +67,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return InMemoryUserDetailsManager(user1,admin);
-    }
 
 
     @Bean

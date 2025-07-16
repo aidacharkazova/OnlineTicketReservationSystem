@@ -28,10 +28,10 @@ public class Schedule {
     @JoinColumn(name = "venue_id")
     private Venue venue;
 
-    @JoinColumn(name = "start_time")
+    @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @JoinColumn(name = "end_time")
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
     @OneToMany(mappedBy = "schedule")
