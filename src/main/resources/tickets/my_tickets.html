@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>My Tickets</title>
+</head>
+<body>
+<section>
+    <h2>My Booked Tickets</h2>
+    <div id="myTicketsList" class="ticket-list">
+        <p>Loading your tickets...</p>
+    </div>
+    <p id="message" class="message" style="display:none;"></p>
+</section>
+</body>
+</html>

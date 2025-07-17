@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>All Events</title>
+</head>
+<body>
+<section>
+    <h2>Upcoming Events</h2>
+    <div id="eventsList" class="event-list">
+        <p>Loading events...</p>
+    </div>
+</section>
+</body>
+</html>

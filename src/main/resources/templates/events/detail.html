@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Event Details</title>
+</head>
+<body>
+<section>
+    <input type="hidden" id="eventId" th:value="${eventId}" />
+    <div id="eventDetails">
+        <p>Loading event details...</p>
+    </div>
+
+    <div id="schedulesList">
+    </div>
+
+    <h3>Ticket Booking</h3>
+    <p id="bookingMessage" class="message" style="display:none;"></p>
+    <p>Select an available seat from the schedules above to book your ticket.</p>
+
+</section>
+</body>
+</html>
