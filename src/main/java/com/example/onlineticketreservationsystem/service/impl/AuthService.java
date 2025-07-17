@@ -5,9 +5,13 @@ import com.example.onlineticketreservationsystem.dto.request.LoginRequest;
 import com.example.onlineticketreservationsystem.dto.request.SignUpRequest;
 import com.example.onlineticketreservationsystem.dto.response.AuthResponse;
 import com.example.onlineticketreservationsystem.model.entity.AppUser;
+import com.example.onlineticketreservationsystem.model.entity.RefreshToken;
+import com.example.onlineticketreservationsystem.repository.RefreshTokenRepository;
 import com.example.onlineticketreservationsystem.repository.UserRepository;
+import com.example.onlineticketreservationsystem.service.RefreshTokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,15 +26,17 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthService(UserRepository userRepo, PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-                       CustomUserDetailsService userDetailsService) {
+                       CustomUserDetailsService userDetailsService, RefreshTokenService refreshTokenService) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public AuthResponse signUp(SignUpRequest request) {
@@ -41,8 +47,13 @@ public class AuthService {
         user.setRoles(List.of("USER"));
         userRepo.save(user);
 
-        String token = jwtUtil.generateToken(userDetailsService.loadUserByUsername(user.getEmail()));
-        return new AuthResponse(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+
+        String accessToken = jwtUtil.generateToken(userDetails);
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
+
+        return new AuthResponse(accessToken, refreshToken.getToken());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -50,8 +61,14 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        String token = jwtUtil.generateToken(userDetailsService.loadUserByUsername(request.getEmail()));
-        return new AuthResponse(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+
+        String accessToken = jwtUtil.generateToken(userDetails);
+
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
+
+        return new AuthResponse(accessToken, refreshToken.getToken());
     }
 }
 

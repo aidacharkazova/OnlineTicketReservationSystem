@@ -1,7 +1,6 @@
 package com.example.onlineticketreservationsystem.dto.request;
 
 import com.example.onlineticketreservationsystem.validation.FutureLocalDateTime;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

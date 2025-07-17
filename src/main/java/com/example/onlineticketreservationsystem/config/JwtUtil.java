@@ -3,11 +3,15 @@ package com.example.onlineticketreservationsystem.config;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -15,7 +19,16 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
 
-    private final Key SECRET_KEY = Keys.hmacShaKeyFor("your-very-secret-key-your-very-secret-key".getBytes());
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    private Key SECRET_KEY;
+
+    @PostConstruct
+    public void init() {
+        SECRET_KEY = Keys.hmacShaKeyFor(Base64.getDecoder().decode(jwtSecret));
+    }
+
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
