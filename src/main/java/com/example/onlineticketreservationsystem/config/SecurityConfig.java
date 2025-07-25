@@ -37,26 +37,37 @@ public class SecurityConfig {
         return customUserDetailsService;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // CSRF tam deaktiv edildi
+                .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/",
-                                "/h2-console/**",
+                                "/", // Home page
+                                "/login", // Login page
+                                "/register", // Register page
+                                "/css/**", // Allow CSS
+                                "/js/**", // Allow JavaScript
+                                "/images/**", // If you add an images folder
+                                "/h2-console/**", // If you're using H2 console
                                 "/auth/login",
                                 "/auth/signUp",
-                                "/auth/refreshToken",
+                                "/auth/refresh", // Refresh token endpoint
+                                "/api/events", // All events (public)
+                                "/api/events/{id}", // Individual event details (public)
+                                "/api/venues", // All venues (public)
+                                "/api/venues/{id}", // Individual venue details (public)
+                                "/api/schedules", // All schedules (public)
+                                "/api/schedules/{id}", // Individual schedule details (public)
+                                "/api/seats", // Seats by schedule (public for viewing, booking requires auth)
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -66,8 +77,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

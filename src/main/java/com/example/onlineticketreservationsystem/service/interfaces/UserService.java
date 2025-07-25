@@ -6,7 +6,7 @@ import com.example.onlineticketreservationsystem.dto.response.AppUserResponse;
 import java.util.List;
 
 public interface UserService {
-    AppUserResponse registerUser(AppUserRequest request);
+//    AppUserResponse registerUser(AppUserRequest request);
 
     AppUserResponse getUserById(Long id);
 

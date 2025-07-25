@@ -6,15 +6,13 @@ import com.example.onlineticketreservationsystem.dto.request.SignUpRequest;
 import com.example.onlineticketreservationsystem.dto.response.AuthResponse;
 import com.example.onlineticketreservationsystem.model.entity.AppUser;
 import com.example.onlineticketreservationsystem.model.entity.RefreshToken;
-import com.example.onlineticketreservationsystem.repository.RefreshTokenRepository;
 import com.example.onlineticketreservationsystem.repository.UserRepository;
-import com.example.onlineticketreservationsystem.service.RefreshTokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,9 +37,10 @@ public class AuthService {
         this.refreshTokenService = refreshTokenService;
     }
 
+    @Transactional
     public AuthResponse signUp(SignUpRequest request) {
         AppUser user = new AppUser();
-        user.setUsername(request.getUsername());
+        user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(List.of("USER"));
@@ -51,7 +50,7 @@ public class AuthService {
 
         String accessToken = jwtUtil.generateToken(userDetails);
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
         return new AuthResponse(accessToken, refreshToken.getToken());
     }
@@ -66,7 +65,7 @@ public class AuthService {
         String accessToken = jwtUtil.generateToken(userDetails);
 
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(request.getEmail());
 
         return new AuthResponse(accessToken, refreshToken.getToken());
     }

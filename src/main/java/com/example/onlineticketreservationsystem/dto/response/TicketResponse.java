@@ -10,6 +10,6 @@ public class TicketResponse {
     private Long id;
     private String seatNumber;
     private TicketStatus status;
-    private String username;
+    private String email;
     private LocalDateTime bookingTime;
 }

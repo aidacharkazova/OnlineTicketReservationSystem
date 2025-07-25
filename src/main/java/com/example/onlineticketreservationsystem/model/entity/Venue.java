@@ -24,7 +24,7 @@ public class Venue {
     private String address;
 
     @Enumerated(EnumType.STRING)
-    private VenueType type; // e.g., CINEMA, THEATER, AIRPORT
+    private VenueType type;
 
     @OneToMany(mappedBy = "venue")
     @JsonIgnore

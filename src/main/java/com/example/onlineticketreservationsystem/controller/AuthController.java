@@ -5,7 +5,7 @@ import com.example.onlineticketreservationsystem.dto.request.RefreshTokenRequest
 import com.example.onlineticketreservationsystem.dto.request.SignUpRequest;
 import com.example.onlineticketreservationsystem.dto.response.AuthResponse;
 import com.example.onlineticketreservationsystem.dto.response.JwtResponse;
-import com.example.onlineticketreservationsystem.service.RefreshTokenService;
+import com.example.onlineticketreservationsystem.service.impl.RefreshTokenService;
 import com.example.onlineticketreservationsystem.service.impl.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

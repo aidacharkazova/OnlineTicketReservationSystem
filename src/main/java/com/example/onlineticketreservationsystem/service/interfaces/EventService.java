@@ -11,4 +11,5 @@ public interface EventService {
     EventResponse getEventById(long id);
     EventResponse updateEvent(long id,EventRequest eventRequest);
     void deleteEvent(EventRequest eventRequest);
+    void deleteFromCache(long id);
 }

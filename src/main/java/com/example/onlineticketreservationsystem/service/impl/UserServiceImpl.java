@@ -26,13 +26,13 @@ public class UserServiceImpl implements UserService {
     private static final String CACHE_NAME = "users";
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Override
-    public AppUserResponse registerUser(AppUserRequest request) {
-        AppUser user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoles(List.of("USER"));
-        return userMapper.toResponse(userRepository.save(user));
-    }
+//    @Override
+//    public AppUserResponse registerUser(AppUserRequest request) {
+//        AppUser user = userMapper.toEntity(request);
+//        user.setPassword(passwordEncoder.encode(request.getPassword()));
+//        user.setRoles(List.of("USER"));
+//        return userMapper.toResponse(userRepository.save(user));
+//    }
 
     @Cacheable(value = CACHE_NAME, key = "#id")
     @Override

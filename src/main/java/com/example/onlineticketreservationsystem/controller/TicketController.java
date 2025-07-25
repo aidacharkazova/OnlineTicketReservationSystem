@@ -43,4 +43,11 @@ public class TicketController {
         ticketService.cancelTicket(ticketId);
         return ResponseEntity.noContent().build();
     }
+
+
+    @DeleteMapping("/cache/{id}")
+    public ResponseEntity<Void> deleteCache(@PathVariable Long id) {
+        ticketService.deleteFromCache(id);
+        return ResponseEntity.noContent().build();
+    }
 }

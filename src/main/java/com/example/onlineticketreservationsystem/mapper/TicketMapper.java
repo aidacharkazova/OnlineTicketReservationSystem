@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface TicketMapper {
 
 
-    @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "user.email", target = "email")
     @Mapping(source = "seat.seatNumber", target = "seatNumber")
     TicketResponse toResponse(Ticket ticket);
 

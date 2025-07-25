@@ -14,6 +14,7 @@ import com.example.onlineticketreservationsystem.service.interfaces.ScheduleServ
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -63,9 +64,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void deleteSchedule(Long id) {
         if (!scheduleRepository.existsById(id)) {
-            throw new ResourceNotFoundException("" +
-                    "Schedule not found");
+            throw new ResourceNotFoundException("Schedule not found");
         }
         scheduleRepository.deleteById(id);
     }
+
+    @CacheEvict(value = CACHE_NAME, key = "#id")
+    public void deleteFromCache(long id) {}
 }

@@ -39,4 +39,10 @@ public class ScheduleController {
         scheduleService.deleteSchedule(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/cache/{id}")
+    public ResponseEntity<Void> deleteCache(@PathVariable Long id) {
+        scheduleService.deleteFromCache(id);
+        return ResponseEntity.noContent().build();
+    }
 }

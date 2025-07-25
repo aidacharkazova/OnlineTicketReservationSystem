@@ -19,7 +19,7 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String fullName;
 
     @Column(unique = true)
     private String email;

@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 
 @Entity
@@ -35,7 +35,7 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 
-    @JoinColumn(name = "booking_time")
+    @Column(name = "booking_time")
     private LocalDateTime bookingTime;
 
 }

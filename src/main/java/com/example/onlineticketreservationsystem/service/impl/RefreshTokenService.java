@@ -1,4 +1,4 @@
-package com.example.onlineticketreservationsystem.service;
+package com.example.onlineticketreservationsystem.service.impl;
 
 
 import com.example.onlineticketreservationsystem.config.JwtUtil;
@@ -33,10 +33,17 @@ public class RefreshTokenService {
 
 
 
-    public RefreshToken createRefreshToken(String username) {
+    public RefreshToken createRefreshToken(String email) {
+        AppUser user = userInfoRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+
+        refreshTokenRepository.findByUserInfo(user)
+                .ifPresent(refreshTokenRepository::delete);
+
         RefreshToken refreshToken = RefreshToken.builder()
-                .userInfo(userInfoRepository.findByUsername(username)
-                        .orElseThrow(() -> new RuntimeException("User not found with username: " + username)))
+                .userInfo(userInfoRepository.findByEmail(email)
+                        .orElseThrow(() -> new RuntimeException("User not found with email: " + email)))
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(60000))//10
                 .build();
@@ -64,8 +71,8 @@ public class RefreshTokenService {
     }
     private UserDetails userDetailsFromUser(AppUser user) {
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword()) // optional — won't affect token generation
+                .username(user.getEmail())
+                .password(user.getPassword())
                 .authorities(user.getRoles().stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList())

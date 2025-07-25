@@ -43,4 +43,10 @@ public class EventController {
         eventService.deleteEvent(request);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/cache/{id}")
+    public ResponseEntity<Void> deleteCache(@PathVariable Long id) {
+        eventService.deleteFromCache(id);
+        return ResponseEntity.noContent().build();
+    }
 }

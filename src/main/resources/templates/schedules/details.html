@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::.content-wrapper})}">
+<head>
+    <style>
+        .seat { width: 40px; height: 40px; margin: 3px; border: 1px solid #ccc; display: inline-block; text-align: center; line-height: 40px; border-radius: 5px; cursor: pointer; }
+        .seat.booked { background-color: #dc3545; color: white; cursor: not-allowed; }
+        .seat.selected { background-color: #198754; color: white; }
+        .seat-row { margin-bottom: 5px; }
+    </style>
+    <title th:text="|Booking for ${schedule.event.name}|">Booking</title>
+</head>
+<body>
+<div class="content-wrapper">
+    <h2 th:text="${schedule.event.name}">Event Name</h2>
+    <p class="lead" th:text="|At ${schedule.venue.name} on ${#temporals.format(schedule.startTime, 'MMM dd, yyyy HH:mm')}|">Venue and Time</p>
+    <hr/>
+
+    <h4>Select Your Seats</h4>
+    <form th:action="@{/tickets}" method="post">
+        <input type="hidden" name="scheduleId" th:value="${schedule.id}" />
+
+        <div class="seat-map bg-light p-4 rounded">
+            <div class="seat-row" th:each="row : ${seatLayout.rows}">
+                <span class="fw-bold me-3" th:text="|Row ${row.key}|">Row A</span>
+                <div class="seat"
+                     th:each="seat : ${row.value}"
+                     th:text="${seat.seatNumber}"
+                     th:classappend="${seat.isBooked} ? 'booked' : 'available'"
+                     th:attr="data-seat-id=${seat.id}">
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h5>Selected Seats: <span id="selected-seats-display">None</span></h5>
+            <input type="hidden" name="seatIds" id="seat-ids-input" />
+            <button type="submit" class="btn btn-success btn-lg" sec:authorize="isAuthenticated()">Book Now</button>
+            <a th:href="@{/login}" class="btn btn-warning btn-lg" sec:authorize="!isAuthenticated()">Login to Book</a>
+        </div>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectedSeats = new Set();
+        const display = document.getElementById('selected-seats-display');
+        const input = document.getElementById('seat-ids-input');
+
+        document.querySelectorAll('.seat.available').forEach(seat => {
+            seat.addEventListener('click', () => {
+                const seatId = seat.getAttribute('data-seat-id');
+                seat.classList.toggle('selected');
+
+                if (seat.classList.contains('selected')) {
+                    selectedSeats.add(seatId);
+                } else {
+                    selectedSeats.delete(seatId);
+                }
+
+                const seatIdsArray = Array.from(selectedSeats);
+                display.textContent = seatIdsArray.length > 0 ? seatIdsArray.join(', ') : 'None';
+                input.value = seatIdsArray.join(',');
+            });
+        });
+    });
+</script>
+</body>
+</html>

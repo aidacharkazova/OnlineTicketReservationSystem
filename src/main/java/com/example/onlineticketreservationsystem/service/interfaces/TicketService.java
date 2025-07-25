@@ -16,4 +16,7 @@ public interface TicketService {
     List<TicketResponse> getTicketsByUserId(Long userId);
 
     void cancelTicket(Long ticketId);
+
+    void deleteFromCache(long id);
+
 }

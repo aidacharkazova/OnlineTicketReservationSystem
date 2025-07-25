@@ -1,7 +1,7 @@
 package com.example.onlineticketreservationsystem.controller;
 
 
-import com.example.onlineticketreservationsystem.dto.request.AppUserRequest;
+
 import com.example.onlineticketreservationsystem.dto.response.AppUserResponse;
 import com.example.onlineticketreservationsystem.service.interfaces.UserService;
 import jakarta.validation.Valid;
@@ -17,10 +17,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AppUserResponse> register(@RequestBody @Valid AppUserRequest request) {
-        return ResponseEntity.ok(userService.registerUser(request));
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<AppUserResponse> getUserById(@PathVariable Long id) {

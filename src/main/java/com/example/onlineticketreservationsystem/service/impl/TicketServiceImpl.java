@@ -18,10 +18,12 @@ import com.example.onlineticketreservationsystem.service.interfaces.TicketServic
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,7 @@ public class TicketServiceImpl implements TicketService {
     private final SeatRepository seatRepository;
     private static final String CACHE_NAME = "tickets";
     private static final Logger logger = LoggerFactory.getLogger(TicketServiceImpl.class);
+    private final EmailService emailService;
 
     @Override
     public TicketResponse reserveTicket(TicketRequest request) {
@@ -57,8 +60,11 @@ public class TicketServiceImpl implements TicketService {
         ticket.setSchedule(schedule);
         ticket.setStatus(TicketStatus.RESERVED);
         ticket.setBookingTime(LocalDateTime.now());
+        Ticket saved = ticketRepository.save(ticket);
 
-        return ticketMapper.toResponse(ticketRepository.save(ticket));
+        emailService.sendBookingConfirmation(user.getEmail(), schedule.getEvent().getName(),ticket.getId());
+        return ticketMapper.toResponse(saved);
+
     }
 
     @Cacheable(value = CACHE_NAME, key = "'all'")
@@ -93,5 +99,9 @@ public class TicketServiceImpl implements TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + ticketId));
         ticketRepository.delete(ticket);
     }
+
+
+    @CacheEvict(value = CACHE_NAME, key = "#id")
+    public void deleteFromCache(long id) {}
 
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -26,7 +27,8 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
-        SECRET_KEY = Keys.hmacShaKeyFor(Base64.getDecoder().decode(jwtSecret));
+        byte[] decodedKey = Base64.getDecoder().decode(jwtSecret);
+        SECRET_KEY = Keys.hmacShaKeyFor(decodedKey);
     }
 
 

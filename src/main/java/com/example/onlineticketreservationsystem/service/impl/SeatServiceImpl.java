@@ -10,6 +10,7 @@ import com.example.onlineticketreservationsystem.repository.SeatRepository;
 import com.example.onlineticketreservationsystem.repository.VenueRepository;
 import com.example.onlineticketreservationsystem.service.interfaces.SeatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class SeatServiceImpl implements SeatService {
     private final SeatRepository seatRepository;
     private final SeatMapper seatMapper;
     private final VenueRepository venueRepository;
+
     @Override
     public SeatResponse createSeat(Long venueId, SeatRequest request) {
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResourceNotFoundException("There is no venue with id " + venueId));
@@ -44,6 +46,8 @@ public class SeatServiceImpl implements SeatService {
 
     @Override
     public void deleteSeat(Long seatId) {
-
+        seatRepository.deleteById(seatId);
     }
+
+
 }

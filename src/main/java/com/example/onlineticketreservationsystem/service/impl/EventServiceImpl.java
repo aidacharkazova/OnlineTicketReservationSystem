@@ -10,6 +10,7 @@ import com.example.onlineticketreservationsystem.service.interfaces.EventService
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -59,4 +60,8 @@ public class EventServiceImpl implements EventService {
     public void deleteEvent(EventRequest eventRequest) {
         eventRepository.delete(eventMapper.toEntity(eventRequest));
     }
+
+    @CacheEvict(value = CACHE_NAME, key = "#id")
+    public void deleteFromCache(long id) {}
+
 }

@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}"> <head>
+    <title layout:fragment="title">Your Page Specific Title Here</title> </head>
+<body>
+<section layout:fragment="content" class="your-page-specific-styles"> </section>
+</body>
+</html>
 <head>
     <title>My Tickets</title>
 </head>
 <body>
-<section>
-    <h2>My Booked Tickets</h2>
-    <div id="myTicketsList" class="ticket-list">
-        <p>Loading your tickets...</p>
+<section class="bg-white p-8 rounded-xl shadow-2xl">
+    <h2 class="text-4xl font-extrabold text-gray-900 mb-8 text-center">Your Booked Tickets</h2>
+    <p id="myTicketsMessage" class="message" style="display:none;"></p>
+    <div id="myTicketsList" class="space-y-6">
+        <!-- Tickets will be loaded here by JavaScript -->
     </div>
-    <p id="message" class="message" style="display:none;"></p>
 </section>
 </body>
 </html>

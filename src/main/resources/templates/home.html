@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::.content-wrapper})}">
+<head>
+    <title>Welcome to TicketHub</title>
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Find Your Next Experience</h1>
+            <p class="col-md-8 fs-4">Browse our collection of top events and book your tickets today.</p>
+        </div>
+    </div>
+
+    <h2>Upcoming Events</h2>
+    <hr/>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="event : ${events}">
+            <div class="card h-100">
+                <img th:src="@{'/images/event-placeholder.png'}" class="card-img-top" alt="Event Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${event.name}">Event Name</h5>
+                    <p class="card-text text-muted" th:text="${event.category}">Category</p>
+                    <p class="card-text" th:text="${event.description}">A short description of the event.</p>
+                </div>
+                <div class="card-footer">
+                    <a th:href="@{/events/{id}(id=${event.id})}" class="btn btn-primary">View Details</a>
+                    <span class="fw-bold float-end" th:text="|Price: $${#numbers.formatDecimal(event.price, 1, 2)}|">Price: $99.99</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
